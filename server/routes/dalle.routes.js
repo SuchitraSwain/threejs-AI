@@ -7,6 +7,7 @@ dotenv.config();
 const router = express.Router();
 
 const config = new Configuration({
+  organization: "org-xFGfYJeXqqkWoksUQJhJWnhb",
   apiKey: process.env.OPENAI_API_KEY,
 });
 
@@ -33,14 +34,22 @@ router.route("/").post(async (req, res) => {
       size: imageSize,
     });
 
-    // const image = response.data.data[0].url;
+    console.log(response);
 
     const image = response.data.data[0].b64_json;
 
     res.status(200).json({ photo: image });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Something went wrong" });
+    if (error.response) {
+      console.log(error.response.status);
+      console.log(error.response.data);
+      return res
+        .status(error.response.status)
+        .json({ error: error.response.data });
+    } else {
+      console.log(error.message);
+      return res.status(500).json({ error: error.message });
+    }
   }
 });
 
