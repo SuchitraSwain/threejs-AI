@@ -6,7 +6,6 @@ dotenv.config();
 
 const router = express.Router();
 
-//OPENAI_API_KEY = "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"
 const config = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
